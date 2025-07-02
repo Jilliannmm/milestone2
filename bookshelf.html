@@ -1,0 +1,30 @@
+<script>
+$(document).ready(function () {
+  const userId = "105314797716233295291";
+  const shelfId = "1001";
+  const url = `https://www.googleapis.com/books/v1/users/${userId}/bookshelves/${shelfId}/volumes`;
+
+  $.get(url, function (data) {
+    const books = data.items;
+    if (!books) {
+      $("#bookshelf").html("<p>No books found in your public shelf.</p>");
+      return;
+    }
+
+    let html = "<div class='book-grid'>";
+    books.forEach(book => {
+      const title = book.volumeInfo.title;
+      const img = book.volumeInfo.imageLinks?.thumbnail || '';
+      const id = book.id;
+
+      html += `
+        <div class='book'>
+          <img src="${img}" alt="${title}">
+          <p><a href="details.html?id=${id}">${title}</a></p>
+        </div>`;
+    });
+    html += "</div>";
+    $("#bookshelf").html(html);
+  });
+});
+</script>
